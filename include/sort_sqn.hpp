@@ -1,29 +1,34 @@
 #include <vector>
 #include <queue>
-std::vector<int> top_sqrtN_sorted(const std::vector<int>& A){
-    using namespace std;
-    int N = static_cast<int>(A.size());
-    if(N == 0) return {};
+#include <cmath>
+#include <functional>
 
-    int k = static_cast<int>(ceil(sqrt(static_cast<double>(N))));
+std::vector<int> top_sqrtN_sorted(const std::vector<int>& A) {
+    const size_t N = A.size();
+    if (N == 0) return {};
 
-    vector<int> heapContainer;
-    heapContainer.reserve(static_cast<size_t>(k) + 1);
-    priority_queue<int, vector<int>, greater<int>> minHeap(greater<int>(), std::move(heapContainer));
+    size_t k = static_cast<size_t>(std::ceil(std::sqrt(static_cast<double>(N))));
+    if (k == 0) return {};
 
-    for (int x : A){
-        minHeap.push(x);
-        if (static_cast<int>(minHeap.size()) > k){
-            minHeap.pop();
+    std::priority_queue<int, std::vector<int>, std::greater<int>> pq;
+
+    for (int x : A) {
+        if (pq.size() < k) {
+            pq.push(x);
+        } else if (x > pq.top()) {
+            pq.pop();
+            pq.push(x);
         }
     }
 
-    vector<int> result;
-    result.reserve(minHeap.size());
-    while(!minHeap.empty()){
-        result.push_back(minHeap.top());
-        minHeap.pop();
+    std::vector<int> result;
+    result.reserve(pq.size());
+    while (!pq.empty()) {
+        result.push_back(pq.top());
+        pq.pop();
     }
-    reverse(result.begin(), result.end());
+
+    std::reverse(result.begin(), result.end());
+
     return result;
 }
