@@ -1,7 +1,7 @@
 #include <vector>
 #include <queue>
 #include <cmath>
-#include <algorithm>
+#include <functional>
 
 std::vector<int> top_sqrtN_sorted(const std::vector<int>& A) {
     const size_t N = A.size();
@@ -11,7 +11,6 @@ std::vector<int> top_sqrtN_sorted(const std::vector<int>& A) {
     if (k == 0) return {};
 
     std::priority_queue<int, std::vector<int>, std::greater<int>> pq;
-    pq = std::priority_queue<int, std::vector<int>, std::greater<int>>();
 
     for (int x : A) {
         if (pq.size() < k) {
@@ -29,7 +28,7 @@ std::vector<int> top_sqrtN_sorted(const std::vector<int>& A) {
         pq.pop();
     }
 
-    std::sort(result.begin(), result.end(), std::greater<int>());
+    std::reverse(result.begin(), result.end());
 
     return result;
 }
